@@ -1,0 +1,49 @@
+
+@PACKAGE_INIT@
+include(${CMAKE_CURRENT_LIST_DIR}/qthreadopenglwidget.cmake)
+
+set(QTOW_FOUND TRUE)
+set(QTOW_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(QTOW_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(QTOW_VERSION "@PROJECT_VERSION@")
+
+set_and_check(QTOW_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/include")
+set_and_check(QTOW_BIN_DIR "${PACKAGE_PREFIX_DIR}/bin")
+
+math(EXPR BITS "8*${CMAKE_SIZEOF_VOID_P}")
+IF(${BITS} MATCHES "64" AND UNIX)
+	set_and_check(QTOW_LIB_DIR "${PACKAGE_PREFIX_DIR}/lib64")
+ELSE()
+	set_and_check(QTOW_LIB_DIR "${PACKAGE_PREFIX_DIR}/lib")
+ENDIF()
+
+
+# Setup Qt
+find_package(QT NAMES Qt5 Qt6 REQUIRED )
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGL Core Gui)
+if(${QT_VERSION_MAJOR} LESS 6)
+else()
+find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
+endif()
+
+set(QT_PREFIX Qt${QT_VERSION_MAJOR})
+
+if(${QT_VERSION_MAJOR} LESS 6)
+set(QTOW_QT_LIBS Qt5::Core
+    Qt5::Gui
+	Qt5::Widgets
+	Qt5::OpenGL
+	)
+else()
+set(QTOW_QT_LIBS Qt::Core
+    Qt::Gui
+	Qt::Widgets
+	Qt::OpenGL
+	Qt::OpenGLWidgets
+	)
+endif()
+
+
+set(QTOW_LIBRARY qthreadopenglwidget)
+add_compile_definitions(QTOW_USE_LIBRARY)
+include_directories(${QTOW_INCLUDE_DIR})

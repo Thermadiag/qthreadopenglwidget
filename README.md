@@ -4,28 +4,28 @@ Purpose
 
 *qthreadopenglwidget* is a small library providing opengl related features for Qt Widgets.
 
-The main class `QThreadOpenGLWidget` is a `QWidget` providing opengl rendering much like `QOpenGLWidget`, but using a dedicated rendering thread to offload the GUI thread.
+The main class `QThreadOpenGLWidget` is a `QWidget` providing opengl rendering much like <a href="https://doc.qt.io/qt-6/qopenglwidget.html">QOpenGLWidget</a>, but using a dedicated rendering thread to offload the GUI thread.
 
 Indeed, using a dedicated rendering thread with `QOpenGLWidget`, while probably possible (according to the documentation), is a real pain. I wasn't able to produce a reliable working class with it, which is why I rolled my own class.
 `QThreadOpenGLWidget` provides a similar API to `QOpenGLWidget` with the virtual members `initializeGL()`, `resizeGL()` and `paintGL()`. It is possible to override its `paintEvent()` to perform QPainter based drawing.
 `QThreadOpenGLWidget` uses a the following approach:
--	Using a QPainter on a QThreadOpenGLWidget will use its own custom <LINK>QPaintEngine.
--	The paint engine serializes drawing commands in a structure similar to <LINK>QPicture (see `QPaintRecord` class).
+-	Using a QPainter on a QThreadOpenGLWidget will use its own custom <a href="https://doc.qt.io/qt-6/qpaintengine.html">QPaintEngine</a>.
+-	The paint engine serializes drawing commands in a structure similar to <a href="https://doc.qt.io/qt-6/qpicture.html">QPicture</a> (see `QPaintRecord` class).
 -	Drawing commands are periodically sent to a rendering thread.
--	The rendering thread apply the drawing commands in an internal QWindow using <LINK>QOpenGLPaintDevice.
+-	The rendering thread apply the drawing commands in an internal QWindow using <a href="https://doc.qt.io/qt-6/qopenglpaintdevice.html">QOpenGLPaintDevice</a>.
 	If the opengl thread is slower than the time spent in recording drawing commands, it will
 	discard older commands and only paint the last ones.
 	
 This greatly reduces the time spent in QWidget::paintEvent(), allow higher frame rates and increase the GUI responsiveness.
 
-`QThreadOpenGLWidget` can be used as the viewport of a <LINK>QGraphicsView, as the class was primary made for this. Indeed, from my experience, using a `QOpenGLWidget` as viewport does not provide much benefits: the CPU load is similar and 
+`QThreadOpenGLWidget` can be used as the viewport of a <a href="https://doc.qt.io/qt-6/qgraphicsview.html">QGraphicsView</a>, as the class was primary made for this. Indeed, from my experience, using a `QOpenGLWidget` as viewport does not provide much benefits: the CPU load is similar and 
 the painting takes the same amount of time as with the raster paint engine (at least most of the times).
 The library provides additional classes to help working with large scenes:
--	`QOpenGLItem`: by inheriting this class, a <LINK>QGraphicsItem can use a caching mechanism based on `QPaintRecord`. This caching mechanism is only enabled when using a `QThreadOpenGLWidget` viewport,
+-	`QOpenGLItem`: by inheriting this class, a <a href="https://doc.qt.io/qt-6/qgraphicsitem.html">QGraphicsItem</a> can use a caching mechanism based on `QPaintRecord`. This caching mechanism is only enabled when using a `QThreadOpenGLWidget` viewport,
 	and reduces the time spent in QGraphicsItem::paint() method. See the class documentation for more details.
 -	`QOpenGLGraphicsItem`: convenient QGraphicsItem inheriting `QOpenGLItem`.
--	`QOpenGLGraphicsObject`: convenient QGraphicsObject inheriting `QOpenGLItem`.
--	`QOpenGLGraphicsWidget`: convenient QGraphicsWidget inheriting `QOpenGLItem`.
+-	`QOpenGLGraphicsObject`: convenient <a href="https://doc.qt.io/qt-6/qgraphicsobject.html">QGraphicsObject</a> inheriting `QOpenGLItem`.
+-	`QOpenGLGraphicsWidget`: convenient <a href="https://doc.qt.io/qt-6/qgraphicswidget.html">QGraphicsWidget</a> inheriting `QOpenGLItem`.
 	
 
 Usage

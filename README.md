@@ -34,6 +34,14 @@ Usage
 The following example shows how to use `QThreadOpenGLWidget` to display several static or dynamic ellipses using all possible ways:
 
 ```cpp
+ #include <QThreadOpenGLWidget.h>
+#include <QTimer>
+#include <QApplication>
+#include <QSurfaceFormat>
+#include <QDateTime>
+ 
+#include <cmath>
+ 
  // Example of QThreadOpenGLWidget that displays static and dynamic ellipses
  // by combining all possible types of drawing mechanisms:
  //  - Overload of QThreadOpenGLWidget::paintGL()
@@ -52,8 +60,8 @@ The following example shows how to use `QThreadOpenGLWidget` to display several 
  		float ry = r.height() / 2;
 
  		float theta = 2 * 3.1415926 / float(num_segments);
- 		float c = std::cosf(theta);//precalculate the sine and cosine
- 		float s = std::sinf(theta);
+ 		float c = std::cos(theta);//precalculate the sine and cosine
+ 		float s = std::sin(theta);
  		float t;
  		float x = 1;//we start at angle = 0
  		float y = 0;
@@ -126,6 +134,26 @@ The following example shows how to use `QThreadOpenGLWidget` to display several 
  	}
 
  };
+ 
+ 
+ 
+ 
+int main(int argc, char *argv[])
+{
+    QSurfaceFormat format;
+    format.setSamples(4);
+    format.setSwapInterval(0);
+    QSurfaceFormat::setDefaultFormat(format);
+
+    QApplication app(argc, argv);
+    app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+
+    MyOpenGLWidget window;
+    window.show();
+
+    return app.exec();
+}
+
 ```
 
 

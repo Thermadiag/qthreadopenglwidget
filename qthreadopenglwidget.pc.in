@@ -5,12 +5,13 @@
 prefix="@CMAKE_INSTALL_PREFIX@"
 exec_prefix="${prefix}"
 libdir="${prefix}/lib"
+libdir64="${prefix}/lib64"
 includedir="${prefix}/include"
 
 Name: @PROJECT_NAME@
 Description: @CMAKE_PROJECT_DESCRIPTION@
 URL: @CMAKE_PROJECT_HOMEPAGE_URL@
 Version: @PROJECT_VERSION@
-Cflags: -I"${includedir}"
-Libs: -L"${libdir}" -lqthreadopenglwidget
+Cflags: -I"${includedir} -DQTOW_USE_LIBRARY"
+Libs: -L"${libdir}" -L"${libdir64}" -lqthreadopenglwidget
 Libs.private: -L"${libdir}" -lqthreadopenglwidget

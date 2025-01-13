@@ -724,7 +724,7 @@ public:
 		// Append a command
 		using value_type = typename std::decay<T>::type;
 		static constexpr std::uint16_t val_size = static_cast<std::uint16_t>(sizeof(value_type));
-		static_assert(val_size >= 8,"");
+		static_assert(val_size >= 8, "");
 
 		if (tail + val_size > tail_end - 1) {
 			finish = true;
@@ -856,9 +856,9 @@ public:
 							p->setRenderHint(QPainter::Antialiasing, true);
 					}
 					else {
-						//auto mode = p->compositionMode();
-						//TEST: This commented line is necessary for on going opengl backend for qwidget
-						//p->setCompositionMode(QPainter::CompositionMode_SourceOver);
+						// auto mode = p->compositionMode();
+						// TEST: This commented line is necessary for on going opengl backend for qwidget
+						// p->setCompositionMode(QPainter::CompositionMode_SourceOver);
 						p->drawRects(vec.data(), (int)vec.size());
 					}
 				} break;
@@ -914,7 +914,7 @@ public:
 					p->setPen(*static_cast<QPen*>(e.value));
 					break;
 				case DirtyHints: {
-					QPainter::RenderHints hints = (QPainter::RenderHints)static_cast<QPainter::RenderHints::Int>( *static_cast<qint64*>(e.value));
+					QPainter::RenderHints hints = (QPainter::RenderHints) static_cast<QPainter::RenderHints::Int>(*static_cast<qint64*>(e.value));
 					p->setRenderHints(hints, true);
 					p->setRenderHints(~hints, false);
 				} break;
@@ -1694,22 +1694,20 @@ public:
 				// qint64 st = QDateTime::currentMSecsSinceEpoch();
 
 				const bool offscreenRendering = inBuffer.load();
-				std::unique_ptr <QOpenGLFramebufferObject> frame;
+				std::unique_ptr<QOpenGLFramebufferObject> frame;
 				if (offscreenRendering) {
 					// Offscreen drawinf
 					thread_context.makeCurrent(&surface);
 					QOpenGLFramebufferObjectFormat format;
 					format.setSamples(surface.format().samples());
 					format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-					frame.reset(new QOpenGLFramebufferObject(v->size(),format));
+					frame.reset(new QOpenGLFramebufferObject(v->size(), format));
 					frame->setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 					frame->bind();
 					inBuffer.store(false);
 				}
 				else
 					thread_context.makeCurrent(v);
-
-				
 
 				if (first) {
 					QOpenGLFunctions* glFuncs = QOpenGLContext::currentContext()->functions();
@@ -1770,7 +1768,6 @@ public:
 					thread_context.swapBuffers(v);
 
 				thread_context.doneCurrent();
-	
 
 				// qint64 el = QDateTime::currentMSecsSinceEpoch() - st;
 				// printf("ogl: %i ms\n", (int)el);
@@ -1789,7 +1786,7 @@ public:
 	QPointF center;
 	QThreadOpenGLWidget* widget{ nullptr };
 	int inRendering{ 0 };
-	
+
 	qint64 lastRequestActive{ 0 };
 	qint64 startPainting{ 0 };
 	uint maximumPaintTime{ 0 };
@@ -1957,11 +1954,10 @@ void QThreadOpenGLWidget::init(bool show_widget)
 
 	d_data->window = new OpenGLWindow(this, d_data->surfaceFormat);
 	d_data->widget = QWidget::createWindowContainer(d_data->window, this);
-	
-	
+
 	while (!d_data->window->thread.context.load())
 		std::this_thread::yield();
-	
+
 	d_data->widget->move(0, 0);
 	d_data->widget->resize(this->size());
 	d_data->widget->installEventFilter(this);
@@ -2072,7 +2068,6 @@ void QThreadOpenGLWidget::drawFunction(const std::function<void(QPainter*)>& fun
 	init();
 	d_data->window->emplaceBack(CommandBatch::DrawFunction, fun);
 }
-
 
 QSurfaceFormat QThreadOpenGLWidget::format() const
 {
@@ -2205,9 +2200,9 @@ bool QThreadOpenGLWidget::eventFilter(QObject* watched, QEvent* event)
 {
 	switch (event->type()) {
 		// Do NOT filter drag events, they are already managed by QWindowContainer
-		//case QEvent::DragEnter:
-		//case QEvent::DragLeave:
-		//case QEvent::DragMove:
+		// case QEvent::DragEnter:
+		// case QEvent::DragLeave:
+		// case QEvent::DragMove:
 		case QEvent::Drop:
 		case QEvent::MouseButtonDblClick:
 		case QEvent::MouseButtonPress:
@@ -2283,8 +2278,7 @@ bool QThreadOpenGLWidget::event(QEvent* e)
 				lay->setContentsMargins(0, 0, 0, 0);
 				setLayout(lay);
 			}
-		}
-		break;
+		} break;
 		case QEvent::Paint: {
 			// Paint event (when the parent is not a QGraphicsView):
 			// ensure that startRendering() and stopRendering() are

@@ -54,7 +54,7 @@
 #elif defined(QTOW_USE_LIBRARY)
 #define EXPORT_DECL Q_DECL_IMPORT
 #else
-#define EXPORT_DECL	// When copy/paste to other projects
+#define EXPORT_DECL // When copy/paste to other projects
 #endif
 #endif
 
@@ -164,9 +164,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintRecord::Optimizations)
 /// QThreadOpenGLWidget is a widget drawing its content using Qt OpenGL drawing engine,
 /// and could be used as a drop in replacement for QOpenGLWidget in most cases.
 ///
-/// In order to use opengl acceleration when drawing on a widget or when using a QGraphicsView, 
-/// the standard approach is to use QOpenGLWidget class. This works in theory, but does not 
-/// provide much benefits in practice. Indeed, using QOpenGLWidget does not reduce the CPU 
+/// In order to use opengl acceleration when drawing on a widget or when using a QGraphicsView,
+/// the standard approach is to use QOpenGLWidget class. This works in theory, but does not
+/// provide much benefits in practice. Indeed, using QOpenGLWidget does not reduce the CPU
 /// usage and the painting takes the same amount of time as the raster engine (at least most of the times).
 ///
 /// QThreadOpenGLWidget uses a different approach:
@@ -193,7 +193,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintRecord::Optimizations)
 /// To use regular drawing based on QPainter, a subclass must override paintEvent() much like any other widget.
 /// A subclass can also override initializeGL(), paintGL() and resizeGL() members to provide a similar behavior
 /// to QOpenGLWidget. In any case, the actual rendering will take place in the dedicated thread.
-/// 
+///
 /// QThreadOpenGLWidget provides the drawFunction() method that directly send a drawing function to
 /// the rendering thread. Using this function is much faster than direct QPainter based drawing,
 /// as it avoids going through the paint commands serialization layer. drawFunction() can be used

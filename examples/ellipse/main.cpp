@@ -4,6 +4,7 @@
 #include <QSurfaceFormat>
 #include <QDateTime>
  
+#include <cmath>
  
  // Example of QThreadOpenGLWidget that displays static and dynamic ellipses
  // by combining all possible types of drawing mechanisms:
@@ -23,8 +24,8 @@
  		float ry = r.height() / 2;
 
  		float theta = 2 * 3.1415926 / float(num_segments);
- 		float c = std::cosf(theta);//precalculate the sine and cosine
- 		float s = std::sinf(theta);
+ 		float c = std::cos(theta);//precalculate the sine and cosine
+ 		float s = std::sin(theta);
  		float t;
  		float x = 1;//we start at angle = 0
  		float y = 0;

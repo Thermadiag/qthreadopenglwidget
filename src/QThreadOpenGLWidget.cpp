@@ -273,11 +273,6 @@ ALWAYS_INLINE DrawVector<T> toVector(const U* begin, const U* end)
 // Bounding rectangle of common drawing items
 //
 
-static QRectF itemBoundingRect(const FunctionItem&) noexcept
-{
-	return QRectF();
-}
-
 static QRectF itemBoundingRect(const QPointF& it) noexcept
 {
 	return QRectF(it, QSizeF(1, 1));
@@ -728,14 +723,17 @@ public:
 	{
 		// Append a command
 		using value_type = typename std::decay<T>::type;
-		if (tail + sizeof(value_type) > tail_end - 1) {
+		static constexpr std::uint16_t val_size = static_cast<std::uint16_t>(sizeof(value_type));
+		static_assert(val_size >= 8,"");
+
+		if (tail + val_size > tail_end - 1) {
 			finish = true;
 			// Returns false if no more room
 			return false;
 		}
-		Q_ASSERT(sizeof(value_type) >= 8);
+
 		new (data + tail) value_type(std::forward<T>(value));
-		tail += sizeof(value_type);
+		tail += val_size;
 		data[tail_end--] = cmd;
 		data[tail_end] = 0;
 		++count;
@@ -858,7 +856,7 @@ public:
 							p->setRenderHint(QPainter::Antialiasing, true);
 					}
 					else {
-						auto mode = p->compositionMode();
+						//auto mode = p->compositionMode();
 						//TEST: This commented line is necessary for on going opengl backend for qwidget
 						//p->setCompositionMode(QPainter::CompositionMode_SourceOver);
 						p->drawRects(vec.data(), (int)vec.size());
@@ -916,7 +914,7 @@ public:
 					p->setPen(*static_cast<QPen*>(e.value));
 					break;
 				case DirtyHints: {
-					QPainter::RenderHints hints = (QPainter::RenderHints) * static_cast<qint64*>(e.value);
+					QPainter::RenderHints hints = (QPainter::RenderHints)static_cast<QPainter::RenderHints::Int>( *static_cast<qint64*>(e.value));
 					p->setRenderHints(hints, true);
 					p->setRenderHints(~hints, false);
 				} break;
@@ -2100,7 +2098,7 @@ QImage QThreadOpenGLWidget::toImage(bool draw_background) const
 		if (draw_background)
 			p.fillRect(QRect(0, 0, width(), height()), this->palette().brush(QPalette::Window));
 
-		const_cast<QThreadOpenGLWidget*>(this)->render(&p, QPoint(), QRegion(), QWidget::RenderFlags{ 0 });
+		const_cast<QThreadOpenGLWidget*>(this)->render(&p, QPoint(), QRegion(), QWidget::RenderFlags{});
 	}
 	return img;
 }

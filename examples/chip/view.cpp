@@ -102,8 +102,8 @@ View::View(const QString &name, bool _useQPaintOpengl, QWidget *parent)
     graphicsView->setRenderHint(QPainter::Antialiasing, false);
     graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
     graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
-    graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-    //graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    //graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     graphicsView->setBackgroundBrush(QBrush(Qt::white));
 

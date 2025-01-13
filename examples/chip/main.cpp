@@ -58,8 +58,6 @@
 
 int main(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(images);
-
     QSurfaceFormat format;
     format.setSamples(4);
     format.setSwapInterval(0);
